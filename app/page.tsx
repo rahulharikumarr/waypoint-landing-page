@@ -86,9 +86,17 @@ function Nav() {
         ))}
       </div>
       <a href="https://warp-tms.vercel.app/signup"
-        className="glow-cta"
-        style={{ background: G, color: '#000', fontWeight: 800, fontSize: 13, padding: '10px 22px', borderRadius: 11, textDecoration: 'none', letterSpacing: '-0.01em' }}
-      >Get started free →</a>
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          background: 'rgba(57,255,20,0.08)',
+          border: '1px solid rgba(57,255,20,0.35)',
+          color: G, fontWeight: 700, fontSize: 13,
+          padding: '9px 20px', borderRadius: 10, textDecoration: 'none',
+          letterSpacing: '-0.01em', transition: 'background 0.15s, border-color 0.15s',
+        }}
+        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(57,255,20,0.14)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(57,255,20,0.6)'; }}
+        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(57,255,20,0.08)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(57,255,20,0.35)'; }}
+      >Get started free <span style={{ opacity: 0.7 }}>→</span></a>
     </nav>
   )
 }
@@ -192,27 +200,121 @@ function QuoteOptions() {
   )
 }
 
-/* ─── Feature Card ─── */
-function FeatureCard({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
+/* ─── Feature Bento: mini UI previews ─── */
+
+function QuotingPreview() {
+  const rows = [
+    { name: 'Warp LTL', price: '$253', days: 3, pct: 52, green: true },
+    { name: 'Estes Express', price: '$312', days: 4, pct: 64, green: false },
+    { name: 'Saia LTL', price: '$289', days: 3, pct: 59, green: false },
+  ]
   return (
-    <div className="feature-card" style={{ ...CARD, padding: '30px 28px 32px' }}>
-      <div style={{ width: 52, height: 52, borderRadius: 15, background: 'rgba(57,255,20,0.07)', border: '1px solid rgba(57,255,20,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 22, boxShadow: '0 0 24px rgba(57,255,20,0.08)' }}>
-        {icon}
-      </div>
-      <h3 style={{ fontSize: 17, fontWeight: 700, color: T.high, marginBottom: 10, letterSpacing: '-0.02em' }}>{title}</h3>
-      <p style={{ fontSize: 14, color: T.mid, lineHeight: 1.72 }}>{desc}</p>
+    <div style={{ marginTop: 20, display: 'flex', flexDirection: 'column', gap: 8 }}>
+      {rows.map((r, i) => (
+        <div key={r.name} style={{ background: i === 0 ? 'rgba(57,255,20,0.07)' : 'rgba(255,255,255,0.03)', border: `1px solid ${i === 0 ? 'rgba(57,255,20,0.25)' : 'rgba(255,255,255,0.06)'}`, borderRadius: 10, padding: '10px 14px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 7 }}>
+            <span style={{ fontSize: 11, fontWeight: 600, color: i === 0 ? G : T.mid }}>{r.name}</span>
+            <span style={{ fontSize: 14, fontWeight: 800, color: T.high, fontFamily: 'var(--font-wordmark)', letterSpacing: '-0.03em' }}>{r.price}</span>
+          </div>
+          <div style={{ height: 3, background: 'rgba(255,255,255,0.06)', borderRadius: 2 }}>
+            <div style={{ height: '100%', width: `${r.pct}%`, background: i === 0 ? G : 'rgba(255,255,255,0.2)', borderRadius: 2, transition: 'width 0.6s ease' }} />
+          </div>
+          <div style={{ fontSize: 10, color: T.dim, marginTop: 5 }}>{r.days}-day transit</div>
+        </div>
+      ))}
     </div>
   )
 }
 
-const FEATURES = [
-  { title: 'Order Management', desc: 'Create freight orders from PO to shipment. Combine multiple orders, set pickup windows, and track every unit from origin to delivery.', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke={G} strokeWidth="1.8" strokeLinecap="round"/><rect x="9" y="3" width="6" height="4" rx="1" stroke={G} strokeWidth="1.8"/><path d="M9 12h6M9 16h4" stroke={G} strokeWidth="1.8" strokeLinecap="round"/></svg> },
-  { title: 'Multi-Carrier Quoting', desc: 'Real-time LTL rates from Warp and 20+ partner carriers in under 2 seconds. Compare price, transit time, and service level — then book in one click.', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke={G} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg> },
-  { title: 'Live Tracking', desc: 'Full event timeline from tender to POD. Real-time status, appointment windows, and instant access to BOL and proof of delivery documents.', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M1 3h15v13H1z" stroke={G} strokeWidth="1.8" strokeLinejoin="round"/><path d="M16 8h4l3 4v4h-7V8z" stroke={G} strokeWidth="1.8" strokeLinejoin="round"/><circle cx="5.5" cy="18.5" r="1.5" stroke={G} strokeWidth="1.8"/><circle cx="18.5" cy="18.5" r="1.5" stroke={G} strokeWidth="1.8"/></svg> },
-  { title: 'Invoice Auditing', desc: 'Automatically match carrier invoices to quoted rates. Flag every variance, surface POD/BOL documents, and approve or dispute without leaving the platform.', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="2" stroke={G} strokeWidth="1.8"/><path d="M2 10h20" stroke={G} strokeWidth="1.8"/><path d="M7 15h3M14 15h3" stroke={G} strokeWidth="1.8" strokeLinecap="round"/></svg> },
-  { title: 'Analytics & Lane Maps', desc: 'Interactive lane density maps, carrier performance breakdowns, spend trends, and on-time metrics. Your freight data visualized beautifully.', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke={G} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg> },
-  { title: 'Team & Permissions', desc: 'Invite your full team with role-based access. Admins, operators, and viewers each get exactly what they need — nothing they don\'t.', icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke={G} strokeWidth="1.8" strokeLinecap="round"/><circle cx="9" cy="7" r="4" stroke={G} strokeWidth="1.8"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke={G} strokeWidth="1.8" strokeLinecap="round"/></svg> },
-]
+function TrackingPreview() {
+  const events = [
+    { label: 'Picked up', loc: 'Los Angeles, CA', done: true, active: false },
+    { label: 'Departed terminal', loc: 'Phoenix, AZ', done: true, active: false },
+    { label: 'In transit', loc: 'Albuquerque, NM', done: false, active: true },
+    { label: 'Delivery est.', loc: 'Chicago, IL', done: false, active: false },
+  ]
+  return (
+    <div style={{ marginTop: 20 }}>
+      {events.map((e, i) => (
+        <div key={e.label} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', marginBottom: i < events.length - 1 ? 14 : 0 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0, paddingTop: 2 }}>
+            <div style={{ width: 10, height: 10, borderRadius: '50%', background: e.active ? G : e.done ? 'rgba(57,255,20,0.4)' : 'rgba(255,255,255,0.1)', border: e.active ? `2px solid ${G}` : 'none', boxShadow: e.active ? '0 0 8px rgba(57,255,20,0.8)' : 'none', animation: e.active ? 'dotPulse 2s ease-in-out infinite' : 'none' }} />
+            {i < events.length - 1 && <div style={{ width: 1, height: 20, background: e.done ? 'rgba(57,255,20,0.2)' : 'rgba(255,255,255,0.07)', marginTop: 3 }} />}
+          </div>
+          <div style={{ paddingBottom: 4 }}>
+            <div style={{ fontSize: 12, fontWeight: e.active ? 700 : 500, color: e.active ? T.high : e.done ? T.mid : T.dim }}>{e.label}</div>
+            <div style={{ fontSize: 10, color: T.dim, marginTop: 2 }}>{e.loc}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function InvoicePreview() {
+  return (
+    <div style={{ marginTop: 20 }}>
+      {[['Quoted rate', '$253.24', false], ['Carrier invoice', '$253.24', false], ['Variance', '$0.00', true]].map(([k, v, green]) => (
+        <div key={k as string} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '9px 12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 8, marginBottom: 6 }}>
+          <span style={{ fontSize: 11, color: T.low }}>{k}</span>
+          <span style={{ fontSize: 14, fontWeight: 800, color: green ? G : T.high, fontFamily: 'var(--font-wordmark)', letterSpacing: '-0.02em' }}>{v}</span>
+        </div>
+      ))}
+      <div style={{ marginTop: 10, padding: '8px 12px', background: 'rgba(57,255,20,0.08)', border: '1px solid rgba(57,255,20,0.2)', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke={G} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        <span style={{ fontSize: 11, fontWeight: 700, color: G }}>Invoice auto-matched ✓</span>
+      </div>
+    </div>
+  )
+}
+
+function AnalyticsPreview() {
+  const bars = [65, 82, 48, 91, 56, 74, 88]
+  const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
+  return (
+    <div style={{ marginTop: 20 }}>
+      <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, height: 60 }}>
+        {bars.map((h, i) => (
+          <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+            <div style={{ width: '100%', height: `${h}%`, background: i === 4 ? G : `rgba(57,255,20,${0.15 + h/400})`, borderRadius: '3px 3px 0 0', boxShadow: i === 4 ? '0 0 10px rgba(57,255,20,0.5)' : 'none', transition: 'height 0.4s ease' }} />
+          </div>
+        ))}
+      </div>
+      <div style={{ display: 'flex', gap: 6, marginTop: 5 }}>
+        {days.map((d, i) => <div key={i} style={{ flex: 1, textAlign: 'center', fontSize: 9, color: T.dim }}>{d}</div>)}
+      </div>
+      <div style={{ display: 'flex', gap: 12, marginTop: 14 }}>
+        {[['$18.4K', 'This week'], ['↓6%', 'vs last week']].map(([v, l]) => (
+          <div key={l} style={{ flex: 1, background: 'rgba(255,255,255,0.03)', borderRadius: 8, padding: '8px 10px' }}>
+            <div style={{ fontSize: 16, fontWeight: 800, color: T.high, fontFamily: 'var(--font-wordmark)', letterSpacing: '-0.03em' }}>{v}</div>
+            <div style={{ fontSize: 10, color: T.dim, marginTop: 2 }}>{l}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function OrderPreview() {
+  const orders = [
+    { id: 'PO-2041', dest: 'Chicago, IL', status: 'Ready to ship', green: true },
+    { id: 'PO-2040', dest: 'Dallas, TX', status: 'In transit', green: false },
+    { id: 'PO-2039', dest: 'New York, NY', status: 'Delivered', green: false },
+  ]
+  return (
+    <div style={{ marginTop: 20, display: 'flex', flexDirection: 'column', gap: 7 }}>
+      {orders.map(o => (
+        <div key={o.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '9px 12px', background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 9 }}>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: T.high, fontFamily: 'var(--font-mono)' }}>{o.id}</div>
+            <div style={{ fontSize: 10, color: T.dim, marginTop: 2 }}>{o.dest}</div>
+          </div>
+          <span style={{ fontSize: 10, fontWeight: 700, color: o.green ? G : T.low, background: o.green ? 'rgba(57,255,20,0.08)' : 'rgba(255,255,255,0.04)', border: `1px solid ${o.green ? 'rgba(57,255,20,0.2)' : 'rgba(255,255,255,0.07)'}`, borderRadius: 6, padding: '3px 8px' }}>{o.status}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
 
 const STEPS = [
   { n: '01', title: 'Create an Order', desc: 'Enter freight details or bulk import via CSV. Set pickup windows, commodity info, and service requirements in seconds.' },
@@ -330,8 +432,84 @@ export default function Home() {
               From first quote to final invoice — Waypoint handles the full freight lifecycle so you can focus on growth.
             </p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
-            {FEATURES.map(f => <FeatureCard key={f.title} {...f} />)}
+
+          {/* Bento grid — row 1 */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 16 }}>
+            {/* Large: Multi-Carrier Quoting */}
+            <div className="feature-card" style={{ ...CARD, padding: '28px 28px 24px', gridColumn: 'span 1', border: '1px solid rgba(57,255,20,0.12)', background: 'rgba(10,14,10,0.95)' }}>
+              <div style={{ width: 44, height: 44, borderRadius: 13, background: 'rgba(57,255,20,0.08)', border: '1px solid rgba(57,255,20,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke={G} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </div>
+              <h3 style={{ fontSize: 16, fontWeight: 700, color: T.high, letterSpacing: '-0.02em', marginBottom: 8 }}>Multi-Carrier Quoting</h3>
+              <p style={{ fontSize: 13, color: T.mid, lineHeight: 1.65 }}>Live LTL rates from Warp + 20+ carriers in under 2 seconds. Compare and book in one click.</p>
+              <QuotingPreview />
+            </div>
+
+            {/* Large: Live Tracking */}
+            <div className="feature-card" style={{ ...CARD, padding: '28px 28px 24px' }}>
+              <div style={{ width: 44, height: 44, borderRadius: 13, background: 'rgba(57,255,20,0.08)', border: '1px solid rgba(57,255,20,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M1 3h15v13H1z" stroke={G} strokeWidth="1.8" strokeLinejoin="round"/><path d="M16 8h4l3 4v4h-7V8z" stroke={G} strokeWidth="1.8" strokeLinejoin="round"/><circle cx="5.5" cy="18.5" r="1.5" stroke={G} strokeWidth="1.8"/><circle cx="18.5" cy="18.5" r="1.5" stroke={G} strokeWidth="1.8"/></svg>
+              </div>
+              <h3 style={{ fontSize: 16, fontWeight: 700, color: T.high, letterSpacing: '-0.02em', marginBottom: 8 }}>Live Tracking</h3>
+              <p style={{ fontSize: 13, color: T.mid, lineHeight: 1.65 }}>Full event timeline from tender to POD. Real-time status updates and instant BOL/POD access.</p>
+              <TrackingPreview />
+            </div>
+
+            {/* Large: Invoice Auditing */}
+            <div className="feature-card" style={{ ...CARD, padding: '28px 28px 24px' }}>
+              <div style={{ width: 44, height: 44, borderRadius: 13, background: 'rgba(57,255,20,0.08)', border: '1px solid rgba(57,255,20,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="2" stroke={G} strokeWidth="1.8"/><path d="M2 10h20" stroke={G} strokeWidth="1.8"/><path d="M7 15h3M14 15h3" stroke={G} strokeWidth="1.8" strokeLinecap="round"/></svg>
+              </div>
+              <h3 style={{ fontSize: 16, fontWeight: 700, color: T.high, letterSpacing: '-0.02em', marginBottom: 8 }}>Invoice Auditing</h3>
+              <p style={{ fontSize: 13, color: T.mid, lineHeight: 1.65 }}>Auto-match invoices to quoted rates. Flag variances, surface documents, approve or dispute.</p>
+              <InvoicePreview />
+            </div>
+          </div>
+
+          {/* Bento grid — row 2 */}
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 16 }}>
+            {/* Wide: Analytics */}
+            <div className="feature-card" style={{ ...CARD, padding: '28px 28px 24px' }}>
+              <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+                <div style={{ width: 44, height: 44, borderRadius: 13, background: 'rgba(57,255,20,0.08)', border: '1px solid rgba(57,255,20,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke={G} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </div>
+                <div>
+                  <h3 style={{ fontSize: 16, fontWeight: 700, color: T.high, letterSpacing: '-0.02em', marginBottom: 6 }}>Analytics & Lane Maps</h3>
+                  <p style={{ fontSize: 13, color: T.mid, lineHeight: 1.65 }}>Interactive lane density maps, spend trends, carrier performance, and on-time metrics powered by your real freight data.</p>
+                </div>
+              </div>
+              <AnalyticsPreview />
+            </div>
+
+            {/* Order Management */}
+            <div className="feature-card" style={{ ...CARD, padding: '28px 24px 24px' }}>
+              <div style={{ width: 44, height: 44, borderRadius: 13, background: 'rgba(57,255,20,0.08)', border: '1px solid rgba(57,255,20,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" stroke={G} strokeWidth="1.8" strokeLinecap="round"/><rect x="9" y="3" width="6" height="4" rx="1" stroke={G} strokeWidth="1.8"/><path d="M9 12h6M9 16h4" stroke={G} strokeWidth="1.8" strokeLinecap="round"/></svg>
+              </div>
+              <h3 style={{ fontSize: 16, fontWeight: 700, color: T.high, letterSpacing: '-0.02em', marginBottom: 8 }}>Order Management</h3>
+              <p style={{ fontSize: 13, color: T.mid, lineHeight: 1.65 }}>Create orders, combine into shipments, and track every unit from PO to delivery.</p>
+              <OrderPreview />
+            </div>
+
+            {/* Team */}
+            <div className="feature-card" style={{ ...CARD, padding: '28px 24px 24px' }}>
+              <div style={{ width: 44, height: 44, borderRadius: 13, background: 'rgba(57,255,20,0.08)', border: '1px solid rgba(57,255,20,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke={G} strokeWidth="1.8" strokeLinecap="round"/><circle cx="9" cy="7" r="4" stroke={G} strokeWidth="1.8"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke={G} strokeWidth="1.8" strokeLinecap="round"/></svg>
+              </div>
+              <h3 style={{ fontSize: 16, fontWeight: 700, color: T.high, letterSpacing: '-0.02em', marginBottom: 8 }}>Team & Permissions</h3>
+              <p style={{ fontSize: 13, color: T.mid, lineHeight: 1.65 }}>Role-based access for admins, operators, and viewers. Everyone sees exactly what they need.</p>
+              {/* Avatars */}
+              <div style={{ marginTop: 20, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {[['JD', 'Admin', G], ['MK', 'Operator', T.mid], ['AR', 'Viewer', T.dim]].map(([initials, role, color]) => (
+                  <div key={initials as string} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: 8 }}>
+                    <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'rgba(57,255,20,0.1)', border: '1px solid rgba(57,255,20,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700, color: G, flexShrink: 0 }}>{initials}</div>
+                    <span style={{ flex: 1, fontSize: 12, color: T.mid, fontWeight: 500 }}>Team member</span>
+                    <span style={{ fontSize: 10, fontWeight: 700, color: color as string }}>{role}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
