@@ -1,0 +1,77 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: #050505;
+  color: #f0f0f0;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+@keyframes blobFloat1 {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(40px,-30px) scale(1.06); }
+  66% { transform: translate(-25px,20px) scale(0.96); }
+}
+@keyframes blobFloat2 {
+  0%,100% { transform: translate(0,0) scale(1); }
+  40% { transform: translate(-50px,35px) scale(1.1); }
+  70% { transform: translate(30px,-20px) scale(0.94); }
+}
+@keyframes blobFloat3 {
+  0%,100% { transform: translate(0,0); }
+  50% { transform: translate(20px,40px) scale(1.07); }
+}
+@keyframes panelGlow {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes glowPulse {
+  0%,100% { box-shadow: 0 0 20px rgba(57,255,20,0.3), 0 0 60px rgba(57,255,20,0.1); }
+  50%     { box-shadow: 0 0 40px rgba(57,255,20,0.5), 0 0 100px rgba(57,255,20,0.2); }
+}
+@keyframes routePulse {
+  0%,100% { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -20; }
+}
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-12px); }
+}
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to   { background-position: 200% 0; }
+}
+@keyframes truckMove {
+  0% { transform: translateX(-60px); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateX(260px); opacity: 0; }
+}
+
+.animate-fade-up { animation: fadeUp 0.7s cubic-bezier(0.23,1,0.32,1) both; }
+.animate-fade-up-2 { animation: fadeUp 0.7s cubic-bezier(0.23,1,0.32,1) 0.15s both; }
+.animate-fade-up-3 { animation: fadeUp 0.7s cubic-bezier(0.23,1,0.32,1) 0.3s both; }
+.animate-fade-in { animation: fadeIn 1s ease both; }
+
+.glow-btn {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+.float-card {
+  animation: float 5s ease-in-out infinite;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
