@@ -193,8 +193,11 @@ function QuoteOptions() {
           <div style={{ fontSize: 11, color: T.low, marginTop: 3 }}>{o.transit} transit</div>
         </div>
       ))}
-      <button style={{ width: '100%', marginTop: 4, padding: '12px', borderRadius: 11, border: 'none', background: G, color: '#000', fontWeight: 800, fontSize: 13, cursor: 'pointer', fontFamily: 'inherit', letterSpacing: '-0.01em' }}>
-        Book Warp LTL →
+      <button style={{ width: '100%', marginTop: 4, padding: '12px', borderRadius: 11, cursor: 'pointer', fontFamily: 'inherit', fontWeight: 700, fontSize: 13, letterSpacing: '-0.01em', background: 'rgba(57,255,20,0.09)', border: '1px solid rgba(57,255,20,0.38)', color: G, transition: 'background 0.15s, border-color 0.15s' }}
+        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(57,255,20,0.16)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(57,255,20,0.6)'; }}
+        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(57,255,20,0.09)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(57,255,20,0.38)'; }}
+      >
+        Book Warp LTL <span style={{ opacity: 0.65 }}>→</span>
       </button>
     </div>
   )
@@ -365,9 +368,11 @@ export default function Home() {
               The freight operating system for modern shippers. Multi-carrier quoting, order management, live tracking, and invoice auditing — all in one place.
             </p>
             <div className="fade-up-4" style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
-              <a href="https://warp-tms.vercel.app/signup" className="glow-cta" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: G, color: '#000', fontWeight: 800, fontSize: 16, padding: '16px 32px', borderRadius: 14, textDecoration: 'none', letterSpacing: '-0.025em' }}>
-                Get started free →
-              </a>
+              <a href="https://warp-tms.vercel.app/signup"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: 'rgba(57,255,20,0.09)', border: '1px solid rgba(57,255,20,0.4)', color: G, fontWeight: 700, fontSize: 15, padding: '14px 28px', borderRadius: 13, textDecoration: 'none', letterSpacing: '-0.015em', transition: 'background 0.15s, border-color 0.15s' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(57,255,20,0.15)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(57,255,20,0.65)'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(57,255,20,0.09)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(57,255,20,0.4)'; }}
+              >Get started free <span style={{ opacity: 0.65 }}>→</span></a>
               <a href="#features" style={{ fontSize: 14, color: T.mid, textDecoration: 'none', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
                 See all features
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -409,14 +414,28 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ═══════ CARRIER BAR ═══════ */}
-      <div style={{ position: 'relative', zIndex: 1, borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '24px 64px' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 10, fontWeight: 700, color: T.dim, letterSpacing: '0.12em', textTransform: 'uppercase', marginRight: 8, whiteSpace: 'nowrap' }}>Carrier network</span>
-          {['Estes Express', 'Saia LTL', 'XPO Logistics', 'FedEx Freight', 'AAA Cooper', 'Roadrunner', 'Old Dominion', 'R+L Carriers'].map((c, i) => (
-            <span key={c} style={{ fontSize: 12, fontWeight: 600, color: T.dim, padding: '4px 12px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 6, whiteSpace: 'nowrap' }}>{c}</span>
-          ))}
-          <span style={{ fontSize: 12, color: T.dim, marginLeft: 4 }}>+ 12 more</span>
+      {/* ═══════ CARRIER MARQUEE ═══════ */}
+      <div style={{ position: 'relative', zIndex: 1, borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '0', overflow: 'hidden' }}>
+        {/* Fade edges */}
+        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 160, background: 'linear-gradient(to right, #050505, transparent)', zIndex: 2, pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 160, background: 'linear-gradient(to left, #050505, transparent)', zIndex: 2, pointerEvents: 'none' }} />
+        {/* Label pinned left */}
+        <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 160, display: 'flex', alignItems: 'center', paddingLeft: 64, zIndex: 3, pointerEvents: 'none' }}>
+          <span style={{ fontSize: 9, fontWeight: 800, color: T.dim, letterSpacing: '0.14em', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>20+ Carriers</span>
+        </div>
+        <div style={{ overflow: 'hidden', padding: '20px 0' }}>
+          {/* Duplicate the list for seamless loop */}
+          <div className="marquee-track" style={{ gap: 10 }}>
+            {[...Array(2)].map((_, set) =>
+              ['Estes Express', 'Saia LTL', 'XPO Logistics', 'FedEx Freight', 'AAA Cooper', 'Roadrunner', 'Old Dominion', 'R+L Carriers', 'Southeastern Freight', 'Forward Air', 'Dayton Freight', 'Pitt Ohio'].map((c) => (
+                <div key={`${set}-${c}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 18px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 9, whiteSpace: 'nowrap', flexShrink: 0, marginRight: 10 }}>
+                  {/* Carrier dot */}
+                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(57,255,20,0.35)', flexShrink: 0 }} />
+                  <span style={{ fontSize: 12, fontWeight: 600, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.01em' }}>{c}</span>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </div>
 
@@ -605,10 +624,10 @@ export default function Home() {
                   {p.period && <span style={{ fontSize: 14, color: T.low }}>{p.period}</span>}
                 </div>
                 <p style={{ fontSize: 13, color: T.mid, lineHeight: 1.65, marginBottom: 28, minHeight: 44 }}>{p.desc}</p>
-                <a href={p.href} style={{ display: 'block', padding: '14px 0', borderRadius: 12, border: p.highlight ? 'none' : '1px solid rgba(255,255,255,0.12)', background: p.highlight ? G : 'transparent', color: p.highlight ? '#000' : T.high, fontWeight: 800, fontSize: 14, textAlign: 'center', textDecoration: 'none', marginBottom: 30, transition: 'opacity 0.15s' }}
-                  onMouseEnter={e => ((e.target as HTMLElement).style.opacity = '0.82')}
-                  onMouseLeave={e => ((e.target as HTMLElement).style.opacity = '1')}
-                >{p.cta}</a>
+                <a href={p.href} style={{ display: 'block', padding: '14px 0', borderRadius: 12, textAlign: 'center', textDecoration: 'none', marginBottom: 30, fontWeight: 700, fontSize: 14, letterSpacing: '-0.01em', background: p.highlight ? 'rgba(57,255,20,0.1)' : 'rgba(255,255,255,0.04)', border: `1px solid ${p.highlight ? 'rgba(57,255,20,0.4)' : 'rgba(255,255,255,0.1)'}`, color: p.highlight ? G : T.mid, transition: 'background 0.15s, border-color 0.15s' }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = p.highlight ? 'rgba(57,255,20,0.18)' : 'rgba(255,255,255,0.08)'; el.style.borderColor = p.highlight ? 'rgba(57,255,20,0.65)' : 'rgba(255,255,255,0.2)'; }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = p.highlight ? 'rgba(57,255,20,0.1)' : 'rgba(255,255,255,0.04)'; el.style.borderColor = p.highlight ? 'rgba(57,255,20,0.4)' : 'rgba(255,255,255,0.1)'; }}
+                >{p.cta} <span style={{ opacity: 0.6 }}>→</span></a>
                 <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: 26 }}>
                   {p.features.map(f => (
                     <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 13 }}>
@@ -633,12 +652,15 @@ export default function Home() {
           Join modern shippers using Waypoint to save time, cut freight costs, and gain real visibility into their operations.
         </p>
         <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
-          <a href="https://warp-tms.vercel.app/signup" className="glow-cta" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: G, color: '#000', fontWeight: 800, fontSize: 17, padding: '18px 40px', borderRadius: 15, textDecoration: 'none', letterSpacing: '-0.025em' }}>
-            Get started free →
-          </a>
-          <a href="mailto:hello@wearewarp.com" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: T.high, fontWeight: 700, fontSize: 17, padding: '18px 40px', borderRadius: 15, textDecoration: 'none' }}>
-            Talk to sales
-          </a>
+          <a href="https://warp-tms.vercel.app/signup"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(57,255,20,0.1)', border: '1px solid rgba(57,255,20,0.4)', color: G, fontWeight: 700, fontSize: 16, padding: '16px 38px', borderRadius: 14, textDecoration: 'none', letterSpacing: '-0.015em', transition: 'background 0.15s, border-color 0.15s' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(57,255,20,0.18)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(57,255,20,0.65)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(57,255,20,0.1)'; (e.currentTarget as HTMLElement).style.borderColor = 'rgba(57,255,20,0.4)'; }}
+          >Get started free <span style={{ opacity: 0.6 }}>→</span></a>
+          <a href="mailto:hello@wearewarp.com" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: T.mid, fontWeight: 600, fontSize: 16, padding: '16px 38px', borderRadius: 14, textDecoration: 'none', transition: 'background 0.15s' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.08)'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)'; }}
+          >Talk to sales</a>
         </div>
       </section>
 
